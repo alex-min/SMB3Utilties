@@ -2,8 +2,8 @@
 #define _NODICE_H
 
 // PPU stuff
-#define PPU_PORTAL_X	272
-#define PPU_PORTAL_Y	44
+#define PPU_PORTAL_X 272
+#define PPU_PORTAL_Y 44
 
 #ifndef TRUE
 #define TRUE 1
@@ -23,17 +23,16 @@ int ppu_sprite_draw(unsigned char id, int x, int y);
 void ppu_sprite_get_offset(unsigned char id, int *offset_x, int *offset_y, int *width, int *height);
 void ppu_shutdown();
 
-
 // GUI controls
 
 enum EDIT_NOTEBOOK_PAGES
 {
-	ENPAGE_GENS,	// Regular level generators
-	ENPAGE_OBJS,	// Regular level objects
-	ENPAGE_STARTS,	// Regular level start positions
-	ENPAGE_TILES,	// World map tiles
-	ENPAGE_MOBJS,	// World map objects
-	ENPAGE_LINKS,	// World map links
+	ENPAGE_GENS,   // Regular level generators
+	ENPAGE_OBJS,   // Regular level objects
+	ENPAGE_STARTS, // Regular level start positions
+	ENPAGE_TILES,  // World map tiles
+	ENPAGE_MOBJS,  // World map objects
+	ENPAGE_LINKS,  // World map links
 	ENPAGE_TOTAL
 };
 
@@ -42,7 +41,8 @@ extern struct _gui_draw_info
 {
 	double tilehint_alpha;
 	double zoom;
-	void *context;	// Holds pointer to context for Cairo; typeless so it can be exposed
+	int show_grid;
+	void *context; // Holds pointer to context for Cairo; typeless so it can be exposed
 } gui_draw_info;
 
 // Not going to expose Cairo surface, but reserved in case we need a "real" type
@@ -74,8 +74,8 @@ void gui_reboot();
 
 extern struct _gui_tilehints
 {
-	gui_surface_t *hint;	// Tile hint graphic
-	int is_global;			// TRUE means this is from the global <tilehints /> collection, so no need to free/reload
+	gui_surface_t *hint; // Tile hint graphic
+	int is_global;		 // TRUE means this is from the global <tilehints /> collection, so no need to free/reload
 } gui_tilehints[256];
 
 // Edit stuff
