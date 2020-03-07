@@ -770,6 +770,20 @@ void gui_surface_overlay(gui_surface_t *draw, int dest_x, int dest_y)
 	cairo_blit(context, draw, 0, 0, dest_x, dest_y, cairo_image_surface_get_width(surface), cairo_image_surface_get_height(surface), gui_draw_info.tilehint_alpha);
 }
 
+void gui_draw_grid(cairo_t *cr)
+{
+	int number_of_divisions = SCREEN_COUNT * SCREEN_WIDTH;
+	double size = SCREEN_COUNT * SCREEN_WIDTH * TILESIZE;
+	for (int i = 1; i < number_of_divisions - 1; i++)
+	{
+		cairo_move_to(cr, (size * i) / number_of_divisions, 0);
+		cairo_line_to(cr, (size * i) / number_of_divisions, size);
+		cairo_move_to(cr, 0, (size * i) / number_of_divisions);
+		cairo_line_to(cr, size, (size * i) / number_of_divisions);
+	}
+	cairo_stroke(cr);
+}
+
 // NOTE: Exposed to guictls.c as a way to get around the fact that GTK Widgets
 // simply cannot have a transparent background and compositing doesn't work
 // on Win32 due to lack of an RGBA colormap etc...
@@ -780,9 +794,6 @@ gboolean gui_PPU_portal_expose_event_callback(GtkWidget *widget, GdkEventExpose 
 	cairo_t *cr;
 
 	cr = gdk_cairo_create(widget->window);
-
-	//cairo_rectangle(cr, event->area.x, event->area.y, event->area.width, event->area.height);
-	//cairo_clip(cr);
 
 	if (data != NULL)
 	{
@@ -808,6 +819,13 @@ gboolean gui_PPU_portal_expose_event_callback(GtkWidget *widget, GdkEventExpose 
 		int rh = (int)((double)event->area.height / zoom);
 
 		ppu_draw(rx, ry, rw, rh);
+		cairo_set_source_rgb(cr, 0.6, 0.6, 0.6);
+		cairo_set_line_width(cr, 0.5);
+	}
+
+	if (gui_draw_info.show_grid)
+	{
+		gui_draw_grid(cr);
 	}
 
 	// If we're in start spot mode, draw over the screen space
